@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>D&D Tools</title>
+    <script src="../../js/amber.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="css/text.css" />
+    <link rel="stylesheet" href="css/sortable.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="http://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all" />
+
+
+    <script type="text/javascript">
+    loadAmber({
+      files: ['Smackbone.js','DDModel.js','DDView.js','DDTest.js'],
+      prefix: 'projects/sortable/js',
+      ready: function() {
+        $(function() {
+            smalltalk.InitiativeTracker._fetch()._appendToJQuery_(jQuery("#container"));
+        });
+    }}); 
+    </script>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+</html>

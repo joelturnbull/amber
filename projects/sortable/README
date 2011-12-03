@@ -1,0 +1,4 @@
+list control using jquery sortable, themed as a D&D initiative tracker
+draggable sorting
+add elements at any part of the list
+persistence via localStorage
