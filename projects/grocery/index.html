@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Grocery</title>
+    <script src="../../js/amber.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/text.css" />
+    <link rel="stylesheet" href="css/960.css" />
+    <script type="text/javascript">
+    loadAmber({
+      files: ['Smackbone.js','Grocery.js','GroceryTest.js'],
+//      files: ['Smackbone.js','Grocery.js','GroceryTest.js','Smackbone-Examples.js'],
+      prefix: 'projects/grocery/js',
+      ready: function() {
+        $(function() {
+            smalltalk.Browser._open();
+//            smalltalk.RecipeWidget._on_(smalltalk.GroceryTestObjects._new()._blts())._appendToJQuery_(jQuery('#container'));
+            jQuery('#container').empty().append(smalltalk.RecipeWidget._on_(smalltalk.GroceryTestObjects._new()._blts())._renderOn_(smalltalk.HTMLCanvas._new()));
+            //smalltalk.RecipeWidget._on_(smalltalk.GroceryTestObjects._new()._blts())._renderOn_(smalltalk.HTMLCanvas._new())._appendToJQuery_(jQuery('#container'));
+            //(smalltalk.RecipeWidget._on_(smalltalk.GroceryTestObjects._new()._blts())._render())._appendToJQuery_(jQuery('#container'));
+//            SmackboneHistory = smalltalk.SmackboneHistorian._new();
+//            SmackboneHistory._addRoute_(smalltalk.GroceryRouter._new());
+//            window.onhashchange = function() { SmackboneHistory._handleHashChanged() };
+//            SmackboneHistory._start();
+//if($('container').text() == '') { window.location.hash = '' };
+
+
+        });
+    }}); 
+    </script>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+</html>
