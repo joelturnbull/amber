@@ -103,7 +103,10 @@ ModelView subclass: #RecipeView
 
 renderOn: html
 
-	( TextView on: self recipe name ) renderOn: html.
+	html p 
+		with: [ 
+			html h5: self recipe name
+		]
 "	( IngredientsView on: self recipe ingredients ) renderOn: html.
 	self renderIngredientAdderOn: html."
 !
@@ -162,9 +165,11 @@ ingredients
 !
 
 renderOn: html
-
-	self ingredients do: [ :anIngredient | 
-        	( IngredientView on: anIngredient ) renderOn: html ]
+	html ul
+		with: [
+			self ingredients do: [ :anIngredient | ( IngredientView on: anIngredient ) renderOn: html ]
+		];
+		yourself.
 ! !
 
 ModelView subclass: #IngredientView
@@ -175,7 +180,7 @@ ModelView subclass: #IngredientView
 
 renderOn: html
 
-	( TextView on: self ingredient name ) renderOn: html.
+	html li with: self ingredient name
 !
 
 ingredient
@@ -196,8 +201,10 @@ initializeOnClick: aBlock
 
 renderOn: html
 
-	input := html input.
-	button := html button with: 'Add Ingredient'.
+	input := html input class: 'input-text'.
+	html p with: [ 
+		button := html button with: 'Add Ingredient'; class: 'small radius blue button'; yourself.
+	].
 
 	button asJQuery click: [ 
             clickAction value: ( Ingredient named: input asJQuery val ).
@@ -236,7 +243,7 @@ SmackboneView subclass: #GroceryWidget
 
 renderOn: html
 
-	self components do: [ :aComponent | aComponent renderOn: html ]
+		self components do: [ :aComponent | aComponent renderOn: html ]
 !
 
 text
@@ -385,7 +392,6 @@ loadLibraryOn: jsonp
 library := RecipeLibrary new.
 
 jsonp rows do: [ :aRow | 
-	collection  inspect.
 	collection add: aRow id
 "  jQuery
     ajax: 'http://localhost/couchdb/recipes/', aRow id
@@ -410,8 +416,7 @@ uri
 !
 
 notEmpty
-window alert: 'h'.
-collection inspect.
+
 	^ collection notEmpty
 !
 
@@ -527,5 +532,31 @@ routes
 	^ (Dictionary new)
 		at: '' put: 'grocery';
 		yourself.
+! !
+
+Object subclass: #GroceryUtil
+	instanceVariableNames: ''
+	category: 'Grocery'!
+
+!GroceryUtil methodsFor: 'not yet classified'!
+
+reset
+| router history | 
+     router := GroceryRouter new.
+     history := SmackboneHistorian new.
+     history addRoute: router.
+     window onhashchange: [ history handleHashChanged ].
+     history start.
+! !
+
+!GroceryUtil class methodsFor: 'not yet classified'!
+
+reset
+| router history | 
+     router := GroceryRouter new.
+     history := SmackboneHistorian new.
+     history addRoute: router.
+     window onhashchange: [ history handleHashChanged ].
+     history start.
 ! !
 

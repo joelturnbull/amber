@@ -242,12 +242,12 @@ selector: unescape('renderOn%3A'),
 category: 'not yet classified',
 fn: function (html){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TextView || TextView), "_on_", [smalltalk.send(smalltalk.send(self, "_recipe", []), "_name", [])]), "_renderOn_", [html]);
+smalltalk.send(smalltalk.send(html, "_p", []), "_with_", [(function(){return smalltalk.send(html, "_h5_", [smalltalk.send(smalltalk.send(self, "_recipe", []), "_name", [])]);})]);
 return self;},
 args: ["html"],
-source: unescape('renderOn%3A%20html%0A%0A%09%28%20TextView%20on%3A%20self%20recipe%20name%20%29%20renderOn%3A%20html.%0A%22%09%28%20IngredientsView%20on%3A%20self%20recipe%20ingredients%20%29%20renderOn%3A%20html.%0A%09self%20renderIngredientAdderOn%3A%20html.%22'),
-messageSends: ["renderOn:", "on:", "name", "recipe"],
-referencedClasses: ["TextView"]
+source: unescape('renderOn%3A%20html%0A%0A%09html%20p%20%0A%09%09with%3A%20%5B%20%0A%09%09%09html%20h5%3A%20self%20recipe%20name%0A%09%09%5D%0A%22%09%28%20IngredientsView%20on%3A%20self%20recipe%20ingredients%20%29%20renderOn%3A%20html.%0A%09self%20renderIngredientAdderOn%3A%20html.%22'),
+messageSends: ["with:", "p", "h5:", "name", "recipe"],
+referencedClasses: []
 }),
 smalltalk.RecipeView);
 
@@ -310,7 +310,7 @@ unescape('_renderOn_'),
 smalltalk.method({
 selector: unescape('renderOn%3A'),
 category: 'not yet classified',
-fn: function (html) {
+fn: function (html){
 var self=this;
 smalltalk.send(smalltalk.send(html, "_div", []), "_with_", [smalltalk.send(self, "_text", [])]);
 return self;},
@@ -363,11 +363,11 @@ selector: unescape('renderOn%3A'),
 category: 'not yet classified',
 fn: function (html){
 var self=this;
-smalltalk.send(smalltalk.send(self, "_ingredients", []), "_do_", [(function(anIngredient){return smalltalk.send(smalltalk.send((smalltalk.IngredientView || IngredientView), "_on_", [anIngredient]), "_renderOn_", [html]);})]);
+(function($rec){smalltalk.send($rec, "_with_", [(function(){return smalltalk.send(smalltalk.send(self, "_ingredients", []), "_do_", [(function(anIngredient){return smalltalk.send(smalltalk.send((smalltalk.IngredientView || IngredientView), "_on_", [anIngredient]), "_renderOn_", [html]);})]);})]);return smalltalk.send($rec, "_yourself", []);})(smalltalk.send(html, "_ul", []));
 return self;},
 args: ["html"],
-source: unescape('renderOn%3A%20html%0A%0A%09self%20ingredients%20do%3A%20%5B%20%3AanIngredient%20%7C%20%0A%20%20%20%20%20%20%20%20%09%28%20IngredientView%20on%3A%20anIngredient%20%29%20renderOn%3A%20html%20%5D'),
-messageSends: ["do:", "ingredients", "renderOn:", "on:"],
+source: unescape('renderOn%3A%20html%0A%09html%20ul%0A%09%09with%3A%20%5B%0A%09%09%09self%20ingredients%20do%3A%20%5B%20%3AanIngredient%20%7C%20%28%20IngredientView%20on%3A%20anIngredient%20%29%20renderOn%3A%20html%20%5D%0A%09%09%5D%3B%0A%09%09yourself.'),
+messageSends: ["with:", "do:", "ingredients", "renderOn:", "on:", "yourself", "ul"],
 referencedClasses: ["IngredientView"]
 }),
 smalltalk.IngredientsView);
@@ -380,14 +380,14 @@ unescape('_renderOn_'),
 smalltalk.method({
 selector: unescape('renderOn%3A'),
 category: 'not yet classified',
-fn: function (html) {
+fn: function (html){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TextView || TextView), "_on_", [smalltalk.send(smalltalk.send(self, "_ingredient", []), "_name", [])]), "_renderOn_", [html]);
+smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [smalltalk.send(smalltalk.send(self, "_ingredient", []), "_name", [])]);
 return self;},
 args: ["html"],
-source: unescape('renderOn%3A%20html%0A%0A%09%28%20TextView%20on%3A%20self%20ingredient%20name%20%29%20renderOn%3A%20html.'),
-messageSends: ["renderOn:", "on:", "name", "ingredient"],
-referencedClasses: ["TextView"]
+source: unescape('renderOn%3A%20html%0A%0A%09html%20li%20with%3A%20self%20ingredient%20name%0A'),
+messageSends: ["with:", "li", "name", "ingredient"],
+referencedClasses: []
 }),
 smalltalk.IngredientView);
 
@@ -431,15 +431,15 @@ unescape('_renderOn_'),
 smalltalk.method({
 selector: unescape('renderOn%3A'),
 category: 'not yet classified',
-fn: function (html) {
+fn: function (html){
 var self=this;
-self['@input']=smalltalk.send(html, "_input", []);
-self['@button']=smalltalk.send(smalltalk.send(html, "_button", []), "_with_", ["Add Ingredient"]);
+self['@input']=smalltalk.send(smalltalk.send(html, "_input", []), "_class_", [unescape("input-text")]);
+smalltalk.send(smalltalk.send(html, "_p", []), "_with_", [(function(){return self['@button']=(function($rec){smalltalk.send($rec, "_with_", ["Add Ingredient"]);smalltalk.send($rec, "_class_", ["small radius blue button"]);return smalltalk.send($rec, "_yourself", []);})(smalltalk.send(html, "_button", []));})]);
 smalltalk.send(smalltalk.send(self['@button'], "_asJQuery", []), "_click_", [(function(){return smalltalk.send(self['@clickAction'], "_value_", [smalltalk.send((smalltalk.Ingredient || Ingredient), "_named_", [smalltalk.send(smalltalk.send(self['@input'], "_asJQuery", []), "_val", [])])]);})]);
 return self;},
 args: ["html"],
-source: unescape('renderOn%3A%20html%0A%0A%09input%20%3A%3D%20html%20input.%0A%09button%20%3A%3D%20html%20button%20with%3A%20%27Add%20Ingredient%27.%0A%0A%09button%20asJQuery%20click%3A%20%5B%20%0A%20%20%20%20%20%20%20%20%20%20%20%20clickAction%20value%3A%20%28%20Ingredient%20named%3A%20input%20asJQuery%20val%20%29.%0A%20%20%20%20%20%20%20%20%5D%0A%22%0A%09button%20asJQuery%20click%3A%20%5B%20%0A%20%20%20%20%20%20%20%20%20%20%09self%20recipe%20add%3A%20%28%20Ingredient%20named%3A%20input%20asJQuery%20val%20%29.%0A%20%20%20%20%20%20%20%20%20%20%09self%20recipe%20save.%0A%20%20%20%20%20%20%20%20%20%20%09self%20refresh.%0A%20%20%20%20%20%20%20%20%5D%0A%22'),
-messageSends: ["input", "with:", "button", "click:", "asJQuery", "value:", "named:", "val"],
+source: unescape('renderOn%3A%20html%0A%0A%09input%20%3A%3D%20html%20input%20class%3A%20%27input-text%27.%0A%09html%20p%20with%3A%20%5B%20%0A%09%09button%20%3A%3D%20html%20button%20with%3A%20%27Add%20Ingredient%27%3B%20class%3A%20%27small%20radius%20blue%20button%27%3B%20yourself.%0A%09%5D.%0A%0A%09button%20asJQuery%20click%3A%20%5B%20%0A%20%20%20%20%20%20%20%20%20%20%20%20clickAction%20value%3A%20%28%20Ingredient%20named%3A%20input%20asJQuery%20val%20%29.%0A%20%20%20%20%20%20%20%20%5D%0A%22%0A%09button%20asJQuery%20click%3A%20%5B%20%0A%20%20%20%20%20%20%20%20%20%20%09self%20recipe%20add%3A%20%28%20Ingredient%20named%3A%20input%20asJQuery%20val%20%29.%0A%20%20%20%20%20%20%20%20%20%20%09self%20recipe%20save.%0A%20%20%20%20%20%20%20%20%20%20%09self%20refresh.%0A%20%20%20%20%20%20%20%20%5D%0A%22'),
+messageSends: ["class:", "input", "with:", "p", "yourself", "button", "click:", "asJQuery", "value:", "named:", "val"],
 referencedClasses: ["Ingredient"]
 }),
 smalltalk.IngredientForm);
@@ -505,7 +505,7 @@ var self=this;
 smalltalk.send(smalltalk.send(self, "_components", []), "_do_", [(function(aComponent){return smalltalk.send(aComponent, "_renderOn_", [html]);})]);
 return self;},
 args: ["html"],
-source: unescape('renderOn%3A%20html%0A%0A%09self%20components%20do%3A%20%5B%20%3AaComponent%20%7C%20aComponent%20renderOn%3A%20html%20%5D'),
+source: unescape('renderOn%3A%20html%0A%0A%09%09self%20components%20do%3A%20%5B%20%3AaComponent%20%7C%20aComponent%20renderOn%3A%20html%20%5D%0A'),
 messageSends: ["do:", "components", "renderOn:"],
 referencedClasses: []
 }),
@@ -813,11 +813,11 @@ fn: function (jsonp){
 var self=this;
 var library=nil;
 library=smalltalk.send((smalltalk.RecipeLibrary || RecipeLibrary), "_new", []);
-smalltalk.send(smalltalk.send(jsonp, "_rows", []), "_do_", [(function(aRow){smalltalk.send(self['@collection'], "_inspect", []);return smalltalk.send(self['@collection'], "_add_", [smalltalk.send(aRow, "_id", [])]);})]);
+smalltalk.send(smalltalk.send(jsonp, "_rows", []), "_do_", [(function(aRow){return smalltalk.send(self['@collection'], "_add_", [smalltalk.send(aRow, "_id", [])]);})]);
 return self;},
 args: ["jsonp"],
-source: unescape('loadLibraryOn%3A%20jsonp%0A%7C%20library%20%7C%0A%0Alibrary%20%3A%3D%20RecipeLibrary%20new.%0A%0Ajsonp%20rows%20do%3A%20%5B%20%3AaRow%20%7C%20%0A%09collection%20%20inspect.%0A%09collection%20add%3A%20aRow%20id%0A%22%20%20jQuery%0A%20%20%20%20ajax%3A%20%27http%3A//localhost/couchdb/recipes/%27%2C%20aRow%20id%0A%20%20%20%20options%3A%20%23%7B%0A%20%20%20%20%20%20%20%20%27type%27%20-%3E%20%27GET%27.%0A%20%20%20%20%20%20%20%20%27dataType%27%20-%3E%20%27jsonp%27.%0A%20%20%20%20%20%20%20%20%27success%27%20-%3E%20%5B%20%3Ajsonp%20%7C%20collection%20add%3A%20aRow%20id%20%5D.%0A%20%20%20%20%20%20%20%20%27error%27%20-%3E%20%5Bwindow%20alert%3A%20%27error%27%5D%0A%20%20%20%20%7D%0A%22%0A%5D'),
-messageSends: ["new", "do:", "rows", "inspect", "add:", "id"],
+source: unescape('loadLibraryOn%3A%20jsonp%0A%7C%20library%20%7C%0A%0Alibrary%20%3A%3D%20RecipeLibrary%20new.%0A%0Ajsonp%20rows%20do%3A%20%5B%20%3AaRow%20%7C%20%0A%09collection%20add%3A%20aRow%20id%0A%22%20%20jQuery%0A%20%20%20%20ajax%3A%20%27http%3A//localhost/couchdb/recipes/%27%2C%20aRow%20id%0A%20%20%20%20options%3A%20%23%7B%0A%20%20%20%20%20%20%20%20%27type%27%20-%3E%20%27GET%27.%0A%20%20%20%20%20%20%20%20%27dataType%27%20-%3E%20%27jsonp%27.%0A%20%20%20%20%20%20%20%20%27success%27%20-%3E%20%5B%20%3Ajsonp%20%7C%20collection%20add%3A%20aRow%20id%20%5D.%0A%20%20%20%20%20%20%20%20%27error%27%20-%3E%20%5Bwindow%20alert%3A%20%27error%27%5D%0A%20%20%20%20%7D%0A%22%0A%5D'),
+messageSends: ["new", "do:", "rows", "add:", "id"],
 referencedClasses: ["RecipeLibrary"]
 }),
 smalltalk.CouchDB);
@@ -861,13 +861,11 @@ selector: unescape('notEmpty'),
 category: 'not yet classified',
 fn: function (){
 var self=this;
-smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["h"]);
-smalltalk.send(self['@collection'], "_inspect", []);
 return smalltalk.send(self['@collection'], "_notEmpty", []);
 return self;},
 args: [],
-source: unescape('notEmpty%0Awindow%20alert%3A%20%27h%27.%0Acollection%20inspect.%0A%09%5E%20collection%20notEmpty'),
-messageSends: ["alert:", "inspect", "notEmpty"],
+source: unescape('notEmpty%0A%0A%09%5E%20collection%20notEmpty'),
+messageSends: ["notEmpty"],
 referencedClasses: []
 }),
 smalltalk.CouchDB);
@@ -1126,5 +1124,52 @@ referencedClasses: ["Dictionary"]
 }),
 smalltalk.GroceryRouter);
 
+
+
+smalltalk.addClass('GroceryUtil', smalltalk.Object, [], 'Grocery');
+smalltalk.addMethod(
+unescape('_reset'),
+smalltalk.method({
+selector: unescape('reset'),
+category: 'not yet classified',
+fn: function (){
+var self=this;
+var router=nil;
+var history=nil;
+router=smalltalk.send((smalltalk.GroceryRouter || GroceryRouter), "_new", []);
+history=smalltalk.send((smalltalk.SmackboneHistorian || SmackboneHistorian), "_new", []);
+smalltalk.send(history, "_addRoute_", [router]);
+smalltalk.send((typeof window == 'undefined' ? nil : window), "_onhashchange_", [(function(){return smalltalk.send(history, "_handleHashChanged", []);})]);
+smalltalk.send(history, "_start", []);
+return self;},
+args: [],
+source: unescape('reset%0A%7C%20router%20history%20%7C%20%0A%20%20%20%20%20router%20%3A%3D%20GroceryRouter%20new.%0A%20%20%20%20%20history%20%3A%3D%20SmackboneHistorian%20new.%0A%20%20%20%20%20history%20addRoute%3A%20router.%0A%20%20%20%20%20window%20onhashchange%3A%20%5B%20history%20handleHashChanged%20%5D.%0A%20%20%20%20%20history%20start.%0A'),
+messageSends: ["new", "addRoute:", "onhashchange:", "handleHashChanged", "start"],
+referencedClasses: ["GroceryRouter", "SmackboneHistorian"]
+}),
+smalltalk.GroceryUtil);
+
+
+smalltalk.addMethod(
+unescape('_reset'),
+smalltalk.method({
+selector: unescape('reset'),
+category: 'not yet classified',
+fn: function (){
+var self=this;
+var router=nil;
+var history=nil;
+router=smalltalk.send((smalltalk.GroceryRouter || GroceryRouter), "_new", []);
+history=smalltalk.send((smalltalk.SmackboneHistorian || SmackboneHistorian), "_new", []);
+smalltalk.send(history, "_addRoute_", [router]);
+smalltalk.send((typeof window == 'undefined' ? nil : window), "_onhashchange_", [(function(){return smalltalk.send(history, "_handleHashChanged", []);})]);
+smalltalk.send(history, "_start", []);
+return self;},
+args: [],
+source: unescape('reset%0A%7C%20router%20history%20%7C%20%0A%20%20%20%20%20router%20%3A%3D%20GroceryRouter%20new.%0A%20%20%20%20%20history%20%3A%3D%20SmackboneHistorian%20new.%0A%20%20%20%20%20history%20addRoute%3A%20router.%0A%20%20%20%20%20window%20onhashchange%3A%20%5B%20history%20handleHashChanged%20%5D.%0A%20%20%20%20%20history%20start.'),
+messageSends: ["new", "addRoute:", "onhashchange:", "handleHashChanged", "start"],
+referencedClasses: ["GroceryRouter", "SmackboneHistorian"]
+}),
+smalltalk.GroceryUtil.klass);
 
 

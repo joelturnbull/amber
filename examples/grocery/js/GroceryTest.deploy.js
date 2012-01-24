@@ -228,8 +228,7 @@ var self=this;
 var library=nil;
 library=smalltalk.send((smalltalk.CouchDB || CouchDB), "_on_at_", [smalltalk.send((smalltalk.Array || Array), "_new", []), unescape("http%3A//127.0.0.1%3A5984/recipes/_all_docs")]);
 smalltalk.send(self, "_assert_", [smalltalk.send(library, "_isEmpty", [])]);
-smalltalk.send(library, "_fetch", []);
-smalltalk.send(self, "_assert_", [smalltalk.send(library, "_notEmpty", [])]);
+smalltalk.send(library, "_fetchOnSuccessDo_", [(function(){return smalltalk.send(self, "_assert_", [smalltalk.send(library, "_notEmpty", [])]);})]);
 return self;}
 }),
 smalltalk.CouchDBTest);

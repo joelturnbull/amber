@@ -171,7 +171,7 @@ smalltalk.method({
 selector: 'renderOn:',
 fn: function (html){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TextView || TextView), "_on_", [smalltalk.send(smalltalk.send(self, "_recipe", []), "_name", [])]), "_renderOn_", [html]);
+smalltalk.send(smalltalk.send(html, "_p", []), "_with_", [(function(){return smalltalk.send(html, "_h5_", [smalltalk.send(smalltalk.send(self, "_recipe", []), "_name", [])]);})]);
 return self;}
 }),
 smalltalk.RecipeView);
@@ -219,7 +219,7 @@ smalltalk.addMethod(
 '_renderOn_',
 smalltalk.method({
 selector: 'renderOn:',
-fn: function (html) {
+fn: function (html){
 var self=this;
 smalltalk.send(smalltalk.send(html, "_div", []), "_with_", [smalltalk.send(self, "_text", [])]);
 return self;}
@@ -257,7 +257,7 @@ smalltalk.method({
 selector: 'renderOn:',
 fn: function (html){
 var self=this;
-smalltalk.send(smalltalk.send(self, "_ingredients", []), "_do_", [(function(anIngredient){return smalltalk.send(smalltalk.send((smalltalk.IngredientView || IngredientView), "_on_", [anIngredient]), "_renderOn_", [html]);})]);
+(function($rec){smalltalk.send($rec, "_with_", [(function(){return smalltalk.send(smalltalk.send(self, "_ingredients", []), "_do_", [(function(anIngredient){return smalltalk.send(smalltalk.send((smalltalk.IngredientView || IngredientView), "_on_", [anIngredient]), "_renderOn_", [html]);})]);})]);return smalltalk.send($rec, "_yourself", []);})(smalltalk.send(html, "_ul", []));
 return self;}
 }),
 smalltalk.IngredientsView);
@@ -269,9 +269,9 @@ smalltalk.addMethod(
 '_renderOn_',
 smalltalk.method({
 selector: 'renderOn:',
-fn: function (html) {
+fn: function (html){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TextView || TextView), "_on_", [smalltalk.send(smalltalk.send(self, "_ingredient", []), "_name", [])]), "_renderOn_", [html]);
+smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [smalltalk.send(smalltalk.send(self, "_ingredient", []), "_name", [])]);
 return self;}
 }),
 smalltalk.IngredientView);
@@ -305,10 +305,10 @@ smalltalk.addMethod(
 '_renderOn_',
 smalltalk.method({
 selector: 'renderOn:',
-fn: function (html) {
+fn: function (html){
 var self=this;
-self['@input']=smalltalk.send(html, "_input", []);
-self['@button']=smalltalk.send(smalltalk.send(html, "_button", []), "_with_", ["Add Ingredient"]);
+self['@input']=smalltalk.send(smalltalk.send(html, "_input", []), "_class_", [unescape("input-text")]);
+smalltalk.send(smalltalk.send(html, "_p", []), "_with_", [(function(){return self['@button']=(function($rec){smalltalk.send($rec, "_with_", ["Add Ingredient"]);smalltalk.send($rec, "_class_", ["small radius blue button"]);return smalltalk.send($rec, "_yourself", []);})(smalltalk.send(html, "_button", []));})]);
 smalltalk.send(smalltalk.send(self['@button'], "_asJQuery", []), "_click_", [(function(){return smalltalk.send(self['@clickAction'], "_value_", [smalltalk.send((smalltalk.Ingredient || Ingredient), "_named_", [smalltalk.send(smalltalk.send(self['@input'], "_asJQuery", []), "_val", [])])]);})]);
 return self;}
 }),
@@ -577,7 +577,7 @@ fn: function (jsonp){
 var self=this;
 var library=nil;
 library=smalltalk.send((smalltalk.RecipeLibrary || RecipeLibrary), "_new", []);
-smalltalk.send(smalltalk.send(jsonp, "_rows", []), "_do_", [(function(aRow){smalltalk.send(self['@collection'], "_inspect", []);return smalltalk.send(self['@collection'], "_add_", [smalltalk.send(aRow, "_id", [])]);})]);
+smalltalk.send(smalltalk.send(jsonp, "_rows", []), "_do_", [(function(aRow){return smalltalk.send(self['@collection'], "_add_", [smalltalk.send(aRow, "_id", [])]);})]);
 return self;}
 }),
 smalltalk.CouchDB);
@@ -610,8 +610,6 @@ smalltalk.method({
 selector: 'notEmpty',
 fn: function (){
 var self=this;
-smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["h"]);
-smalltalk.send(self['@collection'], "_inspect", []);
 return smalltalk.send(self['@collection'], "_notEmpty", []);
 return self;}
 }),
@@ -796,5 +794,42 @@ return self;}
 }),
 smalltalk.GroceryRouter);
 
+
+
+smalltalk.addClass('GroceryUtil', smalltalk.Object, [], 'Grocery');
+smalltalk.addMethod(
+'_reset',
+smalltalk.method({
+selector: 'reset',
+fn: function (){
+var self=this;
+var router=nil;
+var history=nil;
+router=smalltalk.send((smalltalk.GroceryRouter || GroceryRouter), "_new", []);
+history=smalltalk.send((smalltalk.SmackboneHistorian || SmackboneHistorian), "_new", []);
+smalltalk.send(history, "_addRoute_", [router]);
+smalltalk.send((typeof window == 'undefined' ? nil : window), "_onhashchange_", [(function(){return smalltalk.send(history, "_handleHashChanged", []);})]);
+smalltalk.send(history, "_start", []);
+return self;}
+}),
+smalltalk.GroceryUtil);
+
+
+smalltalk.addMethod(
+'_reset',
+smalltalk.method({
+selector: 'reset',
+fn: function (){
+var self=this;
+var router=nil;
+var history=nil;
+router=smalltalk.send((smalltalk.GroceryRouter || GroceryRouter), "_new", []);
+history=smalltalk.send((smalltalk.SmackboneHistorian || SmackboneHistorian), "_new", []);
+smalltalk.send(history, "_addRoute_", [router]);
+smalltalk.send((typeof window == 'undefined' ? nil : window), "_onhashchange_", [(function(){return smalltalk.send(history, "_handleHashChanged", []);})]);
+smalltalk.send(history, "_start", []);
+return self;}
+}),
+smalltalk.GroceryUtil.klass);
 
 

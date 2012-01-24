@@ -186,7 +186,6 @@ testFetch
 			on: Array new
 			at: 'http://127.0.0.1:5984/recipes/_all_docs'.
 	self assert: library isEmpty. 
-	library fetch.
-	self assert: library notEmpty.
+	library fetchOnSuccessDo: [ self assert: library notEmpty ].
 ! !
 
