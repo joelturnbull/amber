@@ -218,7 +218,7 @@ smalltalk.IngredientsWidgetTest);
 
 
 
-smalltalk.addClass('CouchDBTest', smalltalk.GroceryTest, [], 'GroceryTest');
+smalltalk.addClass('SmackboneCollectionTest', smalltalk.GroceryTest, [], 'GroceryTest');
 smalltalk.addMethod(
 '_testFetch',
 smalltalk.method({
@@ -226,12 +226,27 @@ selector: 'testFetch',
 fn: function (){
 var self=this;
 var library=nil;
-library=smalltalk.send((smalltalk.CouchDB || CouchDB), "_on_at_", [smalltalk.send((smalltalk.Array || Array), "_new", []), unescape("http%3A//127.0.0.1%3A5984/recipes/_all_docs")]);
-smalltalk.send(self, "_assert_", [smalltalk.send(library, "_isEmpty", [])]);
+library=smalltalk.send((smalltalk.SmackboneCollection || SmackboneCollection), "_on_at_", [(smalltalk.RecipeLibrary || RecipeLibrary), unescape("http%3A//127.0.0.1%3A5984/recipes/_all_docs")]);
 smalltalk.send(library, "_fetchOnSuccessDo_", [(function(){return smalltalk.send(self, "_assert_", [smalltalk.send(library, "_notEmpty", [])]);})]);
 return self;}
 }),
-smalltalk.CouchDBTest);
+smalltalk.SmackboneCollectionTest);
+
+
+
+smalltalk.addClass('SmackboneModelTest', smalltalk.GroceryTest, [], 'GroceryTest');
+smalltalk.addMethod(
+'_testFetch',
+smalltalk.method({
+selector: 'testFetch',
+fn: function (){
+var self=this;
+var recipe=nil;
+recipe=smalltalk.send((smalltalk.SmackboneModel || SmackboneModel), "_on_at_", [(smalltalk.Recipe || Recipe), unescape("http%3A//127.0.0.1%3A5984/recipes/62dbe43584f7ba52dc7b268479007a2c")]);
+smalltalk.send(recipe, "_fetchOnSuccessDo_", [(function(){return smalltalk.send(self, "_assert_", [smalltalk.send(smalltalk.send(recipe, "_name", []), "_notEmpty", [])]);})]);
+return self;}
+}),
+smalltalk.SmackboneModelTest);
 
 
 

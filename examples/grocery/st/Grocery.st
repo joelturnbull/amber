@@ -41,6 +41,11 @@ named: aName
 named: aName ingredients: anArray
 
 	^ self new initializeNamed: aName ingredients: anArray
+!
+
+fromJSON: aJSONObject
+
+	^ self named: 'stub'
 ! !
 
 Object subclass: #Ingredient
@@ -329,85 +334,48 @@ on: aModel onClick: aBlock
 ! !
 
 Object subclass: #RecipeLibrary
-	instanceVariableNames: 'recipes library'
+	instanceVariableNames: 'recipes library collection'
 	category: 'Grocery'!
 
 !RecipeLibrary methodsFor: 'not yet classified'!
 
-initialize
+initializeFromJSON: aJSONObject
 
-	library := Array new.
+	collection := Array new add:  'a'; yourself.
 !
 
-add: anObject
+xdoesNotUnderstand: aMessage
 
-	library add: anObject
-! !
-
-Object subclass: #CouchDB
-	instanceVariableNames: 'collection uri'
-	category: 'Grocery'!
-
-!CouchDB methodsFor: 'not yet classified'!
-
-initializeOn: aCollection at: aURI
-
-	collection := aCollection.
-	uri := aURI.
-!
-
-doesNotUnderstand: aMessage
-window alert: aMessage selector.
 	^ collection 
 		perform: aMessage selector
 		withArguments: aMessage arguments
 !
 
-fetch
+doesNotUnderstand: aMessage
 
-  jQuery
-    ajax: self uri
-    options: #{
-        'type' -> 'GET'.
-        'dataType' -> 'jsonp'.
-        'success' -> [ :jsonp | self loadLibraryOn: jsonp ].
-        'error' -> [window alert: 'error']
-    }
-!
+	^ collection 
+		perform: aMessage selector
+		withArguments: aMessage arguments
+! !
 
-launchViewOn: aJSONObject
-| recipe recipeView |
+!RecipeLibrary class methodsFor: 'not yet classified'!
 
-  recipe := CouchDoc
-      on: ( RecipeLibrary fromJSON: aJSONObject ).
-"      id: ( aJSONObject at: '_id' )"
-"      revision: ( aJSONObject at: '_rev' )."
-  recipeView := RecipeView on: recipe.
-  recipeView appendToJQuery: ( '#recipe' asJQuery ).
-!
+fromJSON: aJSONObject
 
-loadLibraryOn: jsonp
-| library |
+	^ self new initializeFromJSON: aJSONObject
+! !
 
-library := RecipeLibrary new.
+Object subclass: #SmackbonePersisted
+	instanceVariableNames: 'uri class json'
+	category: 'Grocery'!
 
-jsonp rows do: [ :aRow | 
-	collection add: aRow id
-"  jQuery
-    ajax: 'http://localhost/couchdb/recipes/', aRow id
-    options: #{
-        'type' -> 'GET'.
-        'dataType' -> 'jsonp'.
-        'success' -> [ :jsonp | collection add: aRow id ].
-        'error' -> [window alert: 'error']
-    }
-"
-]
-!
+!SmackbonePersisted methodsFor: 'not yet classified'!
 
-isEmpty
+initializeOn: aClass at: aURI
 
-	^ collection isEmpty
+	class := aClass.
+	uri := aURI.
+	json := JSObjectProxy on: ( Compiler new eval: '({})' ).
 !
 
 uri
@@ -415,9 +383,12 @@ uri
 	^ uri
 !
 
-notEmpty
+xdoesNotUnderstand: aMessage
+window alert: aMessage selector.
 
-	^ collection notEmpty
+	^ self model 
+		perform: aMessage selector
+		withArguments: aMessage arguments
 !
 
 fetchOnSuccessDo: aBlock
@@ -427,88 +398,41 @@ fetchOnSuccessDo: aBlock
     options: #{
         'type' -> 'GET'.
         'dataType' -> 'jsonp'.
-        'success' -> [ :jsonp | self loadLibraryOn: jsonp. aBlock value ].
+        'success' -> [ :jsonp | json := jsonp. aBlock value ].
         'error' -> [window alert: 'error']
     }
-! !
-
-!CouchDB class methodsFor: 'not yet classified'!
-
-on: aCollection at: aURI
-
-	^ self new initializeOn: aCollection at: aURI
 !
 
-at: aURI
+model
 
-	^ self on: Array new at: aURI
-! !
-
-Object subclass: #SmackbonePersisted
-	instanceVariableNames: 'uri model'
-	category: 'Grocery'!
-
-!SmackbonePersisted methodsFor: 'not yet classified'!
+	^ class fromJSON: json
+!
 
 doesNotUnderstand: aMessage
 window alert: aMessage selector.
-	^ model 
-		perform: aMessage selector
-		withArguments: aMessage arguments
-!
 
-initializeFrom: aJSONObject
-!
-
-initializeOn: aModel at: aURI
-
-	model := aModel.
-	uri := aURI.
-! !
-
-SmackbonePersisted subclass: #SmackboneCollection
-	instanceVariableNames: ''
-	category: 'Grocery'!
-
-!SmackboneCollection methodsFor: 'not yet classified'!
-
-fetch
-
-  jQuery
-    ajax: uri
-    options: #{
-        'type' -> 'GET'.
-        'dataType' -> 'jsonp'.
-        'success' -> [ :jsonp | self initializeFrom: jsonp ].
-        'error' -> [window alert: 'error']
-    }
-!
-
-initializeFrom: aJSONObject
-!
-
-doesNotUnderstand: aMessage
-
-	^ model 
+	^ self model 
 		perform: aMessage selector
 		withArguments: aMessage arguments
 ! !
 
-!SmackboneCollection class methodsFor: 'not yet classified'!
+!SmackbonePersisted class methodsFor: 'not yet classified'!
 
-on: aCollection at: aURI
+on: aClass at: aURI
 
-	^ self new initializeOn: aCollection at: aURI
-!
-
-at: aURI
-
-	^ self on: Array new at: aURI
+	^ self new initializeOn: aClass at: aURI
 ! !
 
 SmackbonePersisted subclass: #SmackboneModel
 	instanceVariableNames: ''
 	category: 'Grocery'!
+
+!SmackboneModel methodsFor: 'not yet classified'!
+
+name
+
+	^ self model name
+! !
 
 SmackboneRouter subclass: #GroceryRouter
 	instanceVariableNames: 'grocery'
@@ -558,5 +482,49 @@ reset
      history addRoute: router.
      window onhashchange: [ history handleHashChanged ].
      history start.
+! !
+
+SmackbonePersisted subclass: #SmackboneCollection
+	instanceVariableNames: 'class json'
+	category: 'Grocery'!
+
+!SmackboneCollection methodsFor: 'not yet classified'!
+
+loadLibraryOn: jsonp
+
+	jsonp rows do: [ :aRow | 
+		( self model ) add: aRow id.
+"  jQuery
+    ajax: 'http://localhost/couchdb/recipes/', aRow id
+    options: #{
+        'type' -> 'GET'.
+        'dataType' -> 'jsonp'.
+        'success' -> [ :jsonp | collection add: aRow id ].
+        'error' -> [window alert: 'error']
+    }
+"
+]
+!
+
+isEmpty
+
+	^ self model isEmpty
+!
+
+notEmpty
+
+	^ self model notEmpty
+! !
+
+!SmackboneCollection class methodsFor: 'not yet classified'!
+
+on: aClass at: aURI
+
+	^ self new initializeOn: aClass at: aURI
+!
+
+at: aURI
+
+	^ self on: Array new at: aURI
 ! !
 

@@ -79,6 +79,17 @@ return self;}
 }),
 smalltalk.Recipe.klass);
 
+smalltalk.addMethod(
+'_fromJSON_',
+smalltalk.method({
+selector: 'fromJSON:',
+fn: function (aJSONObject){
+var self=this;
+return smalltalk.send(self, "_named_", ["stub"]);
+return self;}
+}),
+smalltalk.Recipe.klass);
+
 
 smalltalk.addClass('Ingredient', smalltalk.Object, ['name'], 'Grocery');
 smalltalk.addMethod(
@@ -493,43 +504,28 @@ return self;}
 smalltalk.IngredientsWidget.klass);
 
 
-smalltalk.addClass('RecipeLibrary', smalltalk.Object, ['recipes', 'library'], 'Grocery');
+smalltalk.addClass('RecipeLibrary', smalltalk.Object, ['recipes', 'library', 'collection'], 'Grocery');
 smalltalk.addMethod(
-'_initialize',
+'_initializeFromJSON_',
 smalltalk.method({
-selector: 'initialize',
-fn: function () {
+selector: 'initializeFromJSON:',
+fn: function (aJSONObject){
 var self=this;
-self['@library']=smalltalk.send((smalltalk.Array || Array), "_new", []);
+self['@collection']=(function($rec){smalltalk.send($rec, "_add_", ["a"]);return smalltalk.send($rec, "_yourself", []);})(smalltalk.send((smalltalk.Array || Array), "_new", []));
 return self;}
 }),
 smalltalk.RecipeLibrary);
 
 smalltalk.addMethod(
-'_add_',
+'_xdoesNotUnderstand_',
 smalltalk.method({
-selector: 'add:',
-fn: function (anObject){
+selector: 'xdoesNotUnderstand:',
+fn: function (aMessage){
 var self=this;
-smalltalk.send(self['@library'], "_add_", [anObject]);
+return smalltalk.send(self['@collection'], "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
 return self;}
 }),
 smalltalk.RecipeLibrary);
-
-
-
-smalltalk.addClass('CouchDB', smalltalk.Object, ['collection', 'uri'], 'Grocery');
-smalltalk.addMethod(
-'_initializeOn_at_',
-smalltalk.method({
-selector: 'initializeOn:at:',
-fn: function (aCollection, aURI) {
-var self=this;
-self['@collection']=aCollection;
-self['@uri']=aURI;
-return self;}
-}),
-smalltalk.CouchDB);
 
 smalltalk.addMethod(
 '_doesNotUnderstand_',
@@ -537,61 +533,37 @@ smalltalk.method({
 selector: 'doesNotUnderstand:',
 fn: function (aMessage){
 var self=this;
-smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", [smalltalk.send(aMessage, "_selector", [])]);
 return smalltalk.send(self['@collection'], "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
 return self;}
 }),
-smalltalk.CouchDB);
+smalltalk.RecipeLibrary);
+
 
 smalltalk.addMethod(
-'_fetch',
+'_fromJSON_',
 smalltalk.method({
-selector: 'fetch',
-fn: function (){
-var self=this;
-smalltalk.send((typeof jQuery == 'undefined' ? nil : jQuery), "_ajax_options_", [smalltalk.send(self, "_uri", []), smalltalk.HashedCollection._fromPairs_([smalltalk.send("type", "__minus_gt", ["GET"]),smalltalk.send("dataType", "__minus_gt", ["jsonp"]),smalltalk.send("success", "__minus_gt", [(function(jsonp){return smalltalk.send(self, "_loadLibraryOn_", [jsonp]);})]),smalltalk.send("error", "__minus_gt", [(function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["error"]);})])])]);
-return self;}
-}),
-smalltalk.CouchDB);
-
-smalltalk.addMethod(
-'_launchViewOn_',
-smalltalk.method({
-selector: 'launchViewOn:',
+selector: 'fromJSON:',
 fn: function (aJSONObject){
 var self=this;
-var recipe=nil;
-var recipeView=nil;
-recipe=smalltalk.send((smalltalk.CouchDoc || CouchDoc), "_on_", [smalltalk.send((smalltalk.RecipeLibrary || RecipeLibrary), "_fromJSON_", [aJSONObject])]);
-recipeView=smalltalk.send((smalltalk.RecipeView || RecipeView), "_on_", [recipe]);
-smalltalk.send(recipeView, "_appendToJQuery_", [smalltalk.send(unescape("%23recipe"), "_asJQuery", [])]);
+return smalltalk.send(smalltalk.send(self, "_new", []), "_initializeFromJSON_", [aJSONObject]);
 return self;}
 }),
-smalltalk.CouchDB);
+smalltalk.RecipeLibrary.klass);
 
-smalltalk.addMethod(
-'_loadLibraryOn_',
-smalltalk.method({
-selector: 'loadLibraryOn:',
-fn: function (jsonp){
-var self=this;
-var library=nil;
-library=smalltalk.send((smalltalk.RecipeLibrary || RecipeLibrary), "_new", []);
-smalltalk.send(smalltalk.send(jsonp, "_rows", []), "_do_", [(function(aRow){return smalltalk.send(self['@collection'], "_add_", [smalltalk.send(aRow, "_id", [])]);})]);
-return self;}
-}),
-smalltalk.CouchDB);
 
+smalltalk.addClass('SmackbonePersisted', smalltalk.Object, ['uri', 'class', 'json'], 'Grocery');
 smalltalk.addMethod(
-'_isEmpty',
+'_initializeOn_at_',
 smalltalk.method({
-selector: 'isEmpty',
-fn: function (){
+selector: 'initializeOn:at:',
+fn: function (aClass, aURI){
 var self=this;
-return smalltalk.send(self['@collection'], "_isEmpty", []);
+self['@class']=aClass;
+self['@uri']=aURI;
+self['@json']=smalltalk.send((smalltalk.JSObjectProxy || JSObjectProxy), "_on_", [smalltalk.send(smalltalk.send((smalltalk.Compiler || Compiler), "_new", []), "_eval_", [unescape("%28%7B%7D%29")])]);
 return self;}
 }),
-smalltalk.CouchDB);
+smalltalk.SmackbonePersisted);
 
 smalltalk.addMethod(
 '_uri',
@@ -602,18 +574,19 @@ var self=this;
 return self['@uri'];
 return self;}
 }),
-smalltalk.CouchDB);
+smalltalk.SmackbonePersisted);
 
 smalltalk.addMethod(
-'_notEmpty',
+'_xdoesNotUnderstand_',
 smalltalk.method({
-selector: 'notEmpty',
-fn: function (){
+selector: 'xdoesNotUnderstand:',
+fn: function (aMessage){
 var self=this;
-return smalltalk.send(self['@collection'], "_notEmpty", []);
+smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", [smalltalk.send(aMessage, "_selector", [])]);
+return smalltalk.send(smalltalk.send(self, "_model", []), "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
 return self;}
 }),
-smalltalk.CouchDB);
+smalltalk.SmackbonePersisted);
 
 smalltalk.addMethod(
 '_fetchOnSuccessDo_',
@@ -621,36 +594,22 @@ smalltalk.method({
 selector: 'fetchOnSuccessDo:',
 fn: function (aBlock){
 var self=this;
-smalltalk.send((typeof jQuery == 'undefined' ? nil : jQuery), "_ajax_options_", [smalltalk.send(self, "_uri", []), smalltalk.HashedCollection._fromPairs_([smalltalk.send("type", "__minus_gt", ["GET"]),smalltalk.send("dataType", "__minus_gt", ["jsonp"]),smalltalk.send("success", "__minus_gt", [(function(jsonp){smalltalk.send(self, "_loadLibraryOn_", [jsonp]);return smalltalk.send(aBlock, "_value", []);})]),smalltalk.send("error", "__minus_gt", [(function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["error"]);})])])]);
+smalltalk.send((typeof jQuery == 'undefined' ? nil : jQuery), "_ajax_options_", [smalltalk.send(self, "_uri", []), smalltalk.HashedCollection._fromPairs_([smalltalk.send("type", "__minus_gt", ["GET"]),smalltalk.send("dataType", "__minus_gt", ["jsonp"]),smalltalk.send("success", "__minus_gt", [(function(jsonp){self['@json']=jsonp;return smalltalk.send(aBlock, "_value", []);})]),smalltalk.send("error", "__minus_gt", [(function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["error"]);})])])]);
 return self;}
 }),
-smalltalk.CouchDB);
-
+smalltalk.SmackbonePersisted);
 
 smalltalk.addMethod(
-'_on_at_',
+'_model',
 smalltalk.method({
-selector: 'on:at:',
-fn: function (aCollection, aURI) {
+selector: 'model',
+fn: function (){
 var self=this;
-return smalltalk.send(smalltalk.send(self, "_new", []), "_initializeOn_at_", [aCollection, aURI]);
+return smalltalk.send(self['@class'], "_fromJSON_", [self['@json']]);
 return self;}
 }),
-smalltalk.CouchDB.klass);
+smalltalk.SmackbonePersisted);
 
-smalltalk.addMethod(
-'_at_',
-smalltalk.method({
-selector: 'at:',
-fn: function (aURI){
-var self=this;
-return smalltalk.send(self, "_on_at_", [smalltalk.send((smalltalk.Array || Array), "_new", []), aURI]);
-return self;}
-}),
-smalltalk.CouchDB.klass);
-
-
-smalltalk.addClass('SmackbonePersisted', smalltalk.Object, ['uri', 'model'], 'Grocery');
 smalltalk.addMethod(
 '_doesNotUnderstand_',
 smalltalk.method({
@@ -658,95 +617,36 @@ selector: 'doesNotUnderstand:',
 fn: function (aMessage){
 var self=this;
 smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", [smalltalk.send(aMessage, "_selector", [])]);
-return smalltalk.send(self['@model'], "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
+return smalltalk.send(smalltalk.send(self, "_model", []), "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
 return self;}
 }),
 smalltalk.SmackbonePersisted);
-
-smalltalk.addMethod(
-'_initializeFrom_',
-smalltalk.method({
-selector: 'initializeFrom:',
-fn: function (aJSONObject){
-var self=this;
-
-return self;}
-}),
-smalltalk.SmackbonePersisted);
-
-smalltalk.addMethod(
-'_initializeOn_at_',
-smalltalk.method({
-selector: 'initializeOn:at:',
-fn: function (aModel, aURI){
-var self=this;
-self['@model']=aModel;
-self['@uri']=aURI;
-return self;}
-}),
-smalltalk.SmackbonePersisted);
-
-
-
-smalltalk.addClass('SmackboneCollection', smalltalk.SmackbonePersisted, [], 'Grocery');
-smalltalk.addMethod(
-'_fetch',
-smalltalk.method({
-selector: 'fetch',
-fn: function (){
-var self=this;
-smalltalk.send((typeof jQuery == 'undefined' ? nil : jQuery), "_ajax_options_", [self['@uri'], smalltalk.HashedCollection._fromPairs_([smalltalk.send("type", "__minus_gt", ["GET"]),smalltalk.send("dataType", "__minus_gt", ["jsonp"]),smalltalk.send("success", "__minus_gt", [(function(jsonp){return smalltalk.send(self, "_initializeFrom_", [jsonp]);})]),smalltalk.send("error", "__minus_gt", [(function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["error"]);})])])]);
-return self;}
-}),
-smalltalk.SmackboneCollection);
-
-smalltalk.addMethod(
-'_initializeFrom_',
-smalltalk.method({
-selector: 'initializeFrom:',
-fn: function (aJSONObject){
-var self=this;
-
-return self;}
-}),
-smalltalk.SmackboneCollection);
-
-smalltalk.addMethod(
-'_doesNotUnderstand_',
-smalltalk.method({
-selector: 'doesNotUnderstand:',
-fn: function (aMessage){
-var self=this;
-return smalltalk.send(self['@model'], "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
-return self;}
-}),
-smalltalk.SmackboneCollection);
 
 
 smalltalk.addMethod(
 '_on_at_',
 smalltalk.method({
 selector: 'on:at:',
-fn: function (aCollection, aURI){
+fn: function (aClass, aURI){
 var self=this;
-return smalltalk.send(smalltalk.send(self, "_new", []), "_initializeOn_at_", [aCollection, aURI]);
+return smalltalk.send(smalltalk.send(self, "_new", []), "_initializeOn_at_", [aClass, aURI]);
 return self;}
 }),
-smalltalk.SmackboneCollection.klass);
-
-smalltalk.addMethod(
-'_at_',
-smalltalk.method({
-selector: 'at:',
-fn: function (aURI){
-var self=this;
-return smalltalk.send(self, "_on_at_", [smalltalk.send((smalltalk.Array || Array), "_new", []), aURI]);
-return self;}
-}),
-smalltalk.SmackboneCollection.klass);
+smalltalk.SmackbonePersisted.klass);
 
 
 smalltalk.addClass('SmackboneModel', smalltalk.SmackbonePersisted, [], 'Grocery');
+smalltalk.addMethod(
+'_name',
+smalltalk.method({
+selector: 'name',
+fn: function (){
+var self=this;
+return smalltalk.send(smalltalk.send(self, "_model", []), "_name", []);
+return self;}
+}),
+smalltalk.SmackboneModel);
+
 
 
 smalltalk.addClass('GroceryRouter', smalltalk.SmackboneRouter, ['grocery'], 'Grocery');
@@ -831,5 +731,63 @@ smalltalk.send(history, "_start", []);
 return self;}
 }),
 smalltalk.GroceryUtil.klass);
+
+
+smalltalk.addClass('SmackboneCollection', smalltalk.SmackbonePersisted, ['class', 'json'], 'Grocery');
+smalltalk.addMethod(
+'_loadLibraryOn_',
+smalltalk.method({
+selector: 'loadLibraryOn:',
+fn: function (jsonp){
+var self=this;
+smalltalk.send(smalltalk.send(jsonp, "_rows", []), "_do_", [(function(aRow){return smalltalk.send(smalltalk.send(self, "_model", []), "_add_", [smalltalk.send(aRow, "_id", [])]);})]);
+return self;}
+}),
+smalltalk.SmackboneCollection);
+
+smalltalk.addMethod(
+'_isEmpty',
+smalltalk.method({
+selector: 'isEmpty',
+fn: function (){
+var self=this;
+return smalltalk.send(smalltalk.send(self, "_model", []), "_isEmpty", []);
+return self;}
+}),
+smalltalk.SmackboneCollection);
+
+smalltalk.addMethod(
+'_notEmpty',
+smalltalk.method({
+selector: 'notEmpty',
+fn: function (){
+var self=this;
+return smalltalk.send(smalltalk.send(self, "_model", []), "_notEmpty", []);
+return self;}
+}),
+smalltalk.SmackboneCollection);
+
+
+smalltalk.addMethod(
+'_on_at_',
+smalltalk.method({
+selector: 'on:at:',
+fn: function (aClass, aURI){
+var self=this;
+return smalltalk.send(smalltalk.send(self, "_new", []), "_initializeOn_at_", [aClass, aURI]);
+return self;}
+}),
+smalltalk.SmackboneCollection.klass);
+
+smalltalk.addMethod(
+'_at_',
+smalltalk.method({
+selector: 'at:',
+fn: function (aURI){
+var self=this;
+return smalltalk.send(self, "_on_at_", [smalltalk.send((smalltalk.Array || Array), "_new", []), aURI]);
+return self;}
+}),
+smalltalk.SmackboneCollection.klass);
 
 

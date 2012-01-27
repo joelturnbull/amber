@@ -114,6 +114,22 @@ referencedClasses: []
 }),
 smalltalk.Recipe.klass);
 
+smalltalk.addMethod(
+unescape('_fromJSON_'),
+smalltalk.method({
+selector: unescape('fromJSON%3A'),
+category: 'not yet classified',
+fn: function (aJSONObject){
+var self=this;
+return smalltalk.send(self, "_named_", ["stub"]);
+return self;},
+args: ["aJSONObject"],
+source: unescape('fromJSON%3A%20aJSONObject%0A%0A%09%5E%20self%20named%3A%20%27stub%27'),
+messageSends: ["named:"],
+referencedClasses: []
+}),
+smalltalk.Recipe.klass);
+
 
 smalltalk.addClass('Ingredient', smalltalk.Object, ['name'], 'Grocery');
 smalltalk.addMethod(
@@ -698,58 +714,38 @@ referencedClasses: []
 smalltalk.IngredientsWidget.klass);
 
 
-smalltalk.addClass('RecipeLibrary', smalltalk.Object, ['recipes', 'library'], 'Grocery');
+smalltalk.addClass('RecipeLibrary', smalltalk.Object, ['recipes', 'library', 'collection'], 'Grocery');
 smalltalk.addMethod(
-unescape('_initialize'),
+unescape('_initializeFromJSON_'),
 smalltalk.method({
-selector: unescape('initialize'),
+selector: unescape('initializeFromJSON%3A'),
 category: 'not yet classified',
-fn: function () {
+fn: function (aJSONObject){
 var self=this;
-self['@library']=smalltalk.send((smalltalk.Array || Array), "_new", []);
+self['@collection']=(function($rec){smalltalk.send($rec, "_add_", ["a"]);return smalltalk.send($rec, "_yourself", []);})(smalltalk.send((smalltalk.Array || Array), "_new", []));
 return self;},
-args: [],
-source: unescape('initialize%0A%0A%09library%20%3A%3D%20Array%20new.'),
-messageSends: ["new"],
+args: ["aJSONObject"],
+source: unescape('initializeFromJSON%3A%20aJSONObject%0A%0A%09collection%20%3A%3D%20Array%20new%20add%3A%20%20%27a%27%3B%20yourself.'),
+messageSends: ["add:", "yourself", "new"],
 referencedClasses: ["Array"]
 }),
 smalltalk.RecipeLibrary);
 
 smalltalk.addMethod(
-unescape('_add_'),
+unescape('_xdoesNotUnderstand_'),
 smalltalk.method({
-selector: unescape('add%3A'),
+selector: unescape('xdoesNotUnderstand%3A'),
 category: 'not yet classified',
-fn: function (anObject){
+fn: function (aMessage){
 var self=this;
-smalltalk.send(self['@library'], "_add_", [anObject]);
+return smalltalk.send(self['@collection'], "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
 return self;},
-args: ["anObject"],
-source: unescape('add%3A%20anObject%0A%0A%09library%20add%3A%20anObject'),
-messageSends: ["add:"],
+args: ["aMessage"],
+source: unescape('xdoesNotUnderstand%3A%20aMessage%0A%0A%09%5E%20collection%20%0A%09%09perform%3A%20aMessage%20selector%0A%09%09withArguments%3A%20aMessage%20arguments'),
+messageSends: ["perform:withArguments:", "selector", "arguments"],
 referencedClasses: []
 }),
 smalltalk.RecipeLibrary);
-
-
-
-smalltalk.addClass('CouchDB', smalltalk.Object, ['collection', 'uri'], 'Grocery');
-smalltalk.addMethod(
-unescape('_initializeOn_at_'),
-smalltalk.method({
-selector: unescape('initializeOn%3Aat%3A'),
-category: 'not yet classified',
-fn: function (aCollection, aURI) {
-var self=this;
-self['@collection']=aCollection;
-self['@uri']=aURI;
-return self;},
-args: ["aCollection", "aURI"],
-source: unescape('initializeOn%3A%20aCollection%20at%3A%20aURI%0A%0A%09collection%20%3A%3D%20aCollection.%0A%09uri%20%3A%3D%20aURI.'),
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.CouchDB);
 
 smalltalk.addMethod(
 unescape('_doesNotUnderstand_'),
@@ -758,85 +754,51 @@ selector: unescape('doesNotUnderstand%3A'),
 category: 'not yet classified',
 fn: function (aMessage){
 var self=this;
-smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", [smalltalk.send(aMessage, "_selector", [])]);
 return smalltalk.send(self['@collection'], "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
 return self;},
 args: ["aMessage"],
-source: unescape('doesNotUnderstand%3A%20aMessage%0Awindow%20alert%3A%20aMessage%20selector.%0A%09%5E%20collection%20%0A%09%09perform%3A%20aMessage%20selector%0A%09%09withArguments%3A%20aMessage%20arguments'),
-messageSends: ["alert:", "selector", "perform:withArguments:", "arguments"],
+source: unescape('doesNotUnderstand%3A%20aMessage%0A%0A%09%5E%20collection%20%0A%09%09perform%3A%20aMessage%20selector%0A%09%09withArguments%3A%20aMessage%20arguments'),
+messageSends: ["perform:withArguments:", "selector", "arguments"],
 referencedClasses: []
 }),
-smalltalk.CouchDB);
+smalltalk.RecipeLibrary);
+
 
 smalltalk.addMethod(
-unescape('_fetch'),
+unescape('_fromJSON_'),
 smalltalk.method({
-selector: unescape('fetch'),
-category: 'not yet classified',
-fn: function (){
-var self=this;
-smalltalk.send((typeof jQuery == 'undefined' ? nil : jQuery), "_ajax_options_", [smalltalk.send(self, "_uri", []), smalltalk.HashedCollection._fromPairs_([smalltalk.send("type", "__minus_gt", ["GET"]),smalltalk.send("dataType", "__minus_gt", ["jsonp"]),smalltalk.send("success", "__minus_gt", [(function(jsonp){return smalltalk.send(self, "_loadLibraryOn_", [jsonp]);})]),smalltalk.send("error", "__minus_gt", [(function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["error"]);})])])]);
-return self;},
-args: [],
-source: unescape('fetch%0A%0A%20%20jQuery%0A%20%20%20%20ajax%3A%20self%20uri%0A%20%20%20%20options%3A%20%23%7B%0A%20%20%20%20%20%20%20%20%27type%27%20-%3E%20%27GET%27.%0A%20%20%20%20%20%20%20%20%27dataType%27%20-%3E%20%27jsonp%27.%0A%20%20%20%20%20%20%20%20%27success%27%20-%3E%20%5B%20%3Ajsonp%20%7C%20self%20loadLibraryOn%3A%20jsonp%20%5D.%0A%20%20%20%20%20%20%20%20%27error%27%20-%3E%20%5Bwindow%20alert%3A%20%27error%27%5D%0A%20%20%20%20%7D'),
-messageSends: ["ajax:options:", "uri", unescape("-%3E"), "loadLibraryOn:", "alert:"],
-referencedClasses: []
-}),
-smalltalk.CouchDB);
-
-smalltalk.addMethod(
-unescape('_launchViewOn_'),
-smalltalk.method({
-selector: unescape('launchViewOn%3A'),
+selector: unescape('fromJSON%3A'),
 category: 'not yet classified',
 fn: function (aJSONObject){
 var self=this;
-var recipe=nil;
-var recipeView=nil;
-recipe=smalltalk.send((smalltalk.CouchDoc || CouchDoc), "_on_", [smalltalk.send((smalltalk.RecipeLibrary || RecipeLibrary), "_fromJSON_", [aJSONObject])]);
-recipeView=smalltalk.send((smalltalk.RecipeView || RecipeView), "_on_", [recipe]);
-smalltalk.send(recipeView, "_appendToJQuery_", [smalltalk.send(unescape("%23recipe"), "_asJQuery", [])]);
+return smalltalk.send(smalltalk.send(self, "_new", []), "_initializeFromJSON_", [aJSONObject]);
 return self;},
 args: ["aJSONObject"],
-source: unescape('launchViewOn%3A%20aJSONObject%0A%7C%20recipe%20recipeView%20%7C%0A%0A%20%20recipe%20%3A%3D%20CouchDoc%0A%20%20%20%20%20%20on%3A%20%28%20RecipeLibrary%20fromJSON%3A%20aJSONObject%20%29.%0A%22%20%20%20%20%20%20id%3A%20%28%20aJSONObject%20at%3A%20%27_id%27%20%29%22%0A%22%20%20%20%20%20%20revision%3A%20%28%20aJSONObject%20at%3A%20%27_rev%27%20%29.%22%0A%20%20recipeView%20%3A%3D%20RecipeView%20on%3A%20recipe.%0A%20%20recipeView%20appendToJQuery%3A%20%28%20%27%23recipe%27%20asJQuery%20%29.%0A'),
-messageSends: ["on:", "fromJSON:", "appendToJQuery:", "asJQuery"],
-referencedClasses: ["CouchDoc", "RecipeLibrary", "RecipeView"]
-}),
-smalltalk.CouchDB);
-
-smalltalk.addMethod(
-unescape('_loadLibraryOn_'),
-smalltalk.method({
-selector: unescape('loadLibraryOn%3A'),
-category: 'not yet classified',
-fn: function (jsonp){
-var self=this;
-var library=nil;
-library=smalltalk.send((smalltalk.RecipeLibrary || RecipeLibrary), "_new", []);
-smalltalk.send(smalltalk.send(jsonp, "_rows", []), "_do_", [(function(aRow){return smalltalk.send(self['@collection'], "_add_", [smalltalk.send(aRow, "_id", [])]);})]);
-return self;},
-args: ["jsonp"],
-source: unescape('loadLibraryOn%3A%20jsonp%0A%7C%20library%20%7C%0A%0Alibrary%20%3A%3D%20RecipeLibrary%20new.%0A%0Ajsonp%20rows%20do%3A%20%5B%20%3AaRow%20%7C%20%0A%09collection%20add%3A%20aRow%20id%0A%22%20%20jQuery%0A%20%20%20%20ajax%3A%20%27http%3A//localhost/couchdb/recipes/%27%2C%20aRow%20id%0A%20%20%20%20options%3A%20%23%7B%0A%20%20%20%20%20%20%20%20%27type%27%20-%3E%20%27GET%27.%0A%20%20%20%20%20%20%20%20%27dataType%27%20-%3E%20%27jsonp%27.%0A%20%20%20%20%20%20%20%20%27success%27%20-%3E%20%5B%20%3Ajsonp%20%7C%20collection%20add%3A%20aRow%20id%20%5D.%0A%20%20%20%20%20%20%20%20%27error%27%20-%3E%20%5Bwindow%20alert%3A%20%27error%27%5D%0A%20%20%20%20%7D%0A%22%0A%5D'),
-messageSends: ["new", "do:", "rows", "add:", "id"],
-referencedClasses: ["RecipeLibrary"]
-}),
-smalltalk.CouchDB);
-
-smalltalk.addMethod(
-unescape('_isEmpty'),
-smalltalk.method({
-selector: unescape('isEmpty'),
-category: 'not yet classified',
-fn: function (){
-var self=this;
-return smalltalk.send(self['@collection'], "_isEmpty", []);
-return self;},
-args: [],
-source: unescape('isEmpty%0A%0A%09%5E%20collection%20isEmpty'),
-messageSends: ["isEmpty"],
+source: unescape('fromJSON%3A%20aJSONObject%0A%0A%09%5E%20self%20new%20initializeFromJSON%3A%20aJSONObject'),
+messageSends: ["initializeFromJSON:", "new"],
 referencedClasses: []
 }),
-smalltalk.CouchDB);
+smalltalk.RecipeLibrary.klass);
+
+
+smalltalk.addClass('SmackbonePersisted', smalltalk.Object, ['uri', 'class', 'json'], 'Grocery');
+smalltalk.addMethod(
+unescape('_initializeOn_at_'),
+smalltalk.method({
+selector: unescape('initializeOn%3Aat%3A'),
+category: 'not yet classified',
+fn: function (aClass, aURI){
+var self=this;
+self['@class']=aClass;
+self['@uri']=aURI;
+self['@json']=smalltalk.send((smalltalk.JSObjectProxy || JSObjectProxy), "_on_", [smalltalk.send(smalltalk.send((smalltalk.Compiler || Compiler), "_new", []), "_eval_", [unescape("%28%7B%7D%29")])]);
+return self;},
+args: ["aClass", "aURI"],
+source: unescape('initializeOn%3A%20aClass%20at%3A%20aURI%0A%0A%09class%20%3A%3D%20aClass.%0A%09uri%20%3A%3D%20aURI.%0A%09json%20%3A%3D%20JSObjectProxy%20on%3A%20%28%20Compiler%20new%20eval%3A%20%27%28%7B%7D%29%27%20%29.'),
+messageSends: ["on:", "eval:", "new"],
+referencedClasses: ["JSObjectProxy", "Compiler"]
+}),
+smalltalk.SmackbonePersisted);
 
 smalltalk.addMethod(
 unescape('_uri'),
@@ -852,23 +814,24 @@ source: unescape('uri%0A%0A%09%5E%20uri'),
 messageSends: [],
 referencedClasses: []
 }),
-smalltalk.CouchDB);
+smalltalk.SmackbonePersisted);
 
 smalltalk.addMethod(
-unescape('_notEmpty'),
+unescape('_xdoesNotUnderstand_'),
 smalltalk.method({
-selector: unescape('notEmpty'),
+selector: unescape('xdoesNotUnderstand%3A'),
 category: 'not yet classified',
-fn: function (){
+fn: function (aMessage){
 var self=this;
-return smalltalk.send(self['@collection'], "_notEmpty", []);
+smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", [smalltalk.send(aMessage, "_selector", [])]);
+return smalltalk.send(smalltalk.send(self, "_model", []), "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
 return self;},
-args: [],
-source: unescape('notEmpty%0A%0A%09%5E%20collection%20notEmpty'),
-messageSends: ["notEmpty"],
+args: ["aMessage"],
+source: unescape('xdoesNotUnderstand%3A%20aMessage%0Awindow%20alert%3A%20aMessage%20selector.%0A%0A%09%5E%20self%20model%20%0A%09%09perform%3A%20aMessage%20selector%0A%09%09withArguments%3A%20aMessage%20arguments'),
+messageSends: ["alert:", "selector", "perform:withArguments:", "model", "arguments"],
 referencedClasses: []
 }),
-smalltalk.CouchDB);
+smalltalk.SmackbonePersisted);
 
 smalltalk.addMethod(
 unescape('_fetchOnSuccessDo_'),
@@ -877,50 +840,31 @@ selector: unescape('fetchOnSuccessDo%3A'),
 category: 'not yet classified',
 fn: function (aBlock){
 var self=this;
-smalltalk.send((typeof jQuery == 'undefined' ? nil : jQuery), "_ajax_options_", [smalltalk.send(self, "_uri", []), smalltalk.HashedCollection._fromPairs_([smalltalk.send("type", "__minus_gt", ["GET"]),smalltalk.send("dataType", "__minus_gt", ["jsonp"]),smalltalk.send("success", "__minus_gt", [(function(jsonp){smalltalk.send(self, "_loadLibraryOn_", [jsonp]);return smalltalk.send(aBlock, "_value", []);})]),smalltalk.send("error", "__minus_gt", [(function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["error"]);})])])]);
+smalltalk.send((typeof jQuery == 'undefined' ? nil : jQuery), "_ajax_options_", [smalltalk.send(self, "_uri", []), smalltalk.HashedCollection._fromPairs_([smalltalk.send("type", "__minus_gt", ["GET"]),smalltalk.send("dataType", "__minus_gt", ["jsonp"]),smalltalk.send("success", "__minus_gt", [(function(jsonp){self['@json']=jsonp;return smalltalk.send(aBlock, "_value", []);})]),smalltalk.send("error", "__minus_gt", [(function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["error"]);})])])]);
 return self;},
 args: ["aBlock"],
-source: unescape('fetchOnSuccessDo%3A%20aBlock%0A%0A%20%20jQuery%0A%20%20%20%20ajax%3A%20self%20uri%0A%20%20%20%20options%3A%20%23%7B%0A%20%20%20%20%20%20%20%20%27type%27%20-%3E%20%27GET%27.%0A%20%20%20%20%20%20%20%20%27dataType%27%20-%3E%20%27jsonp%27.%0A%20%20%20%20%20%20%20%20%27success%27%20-%3E%20%5B%20%3Ajsonp%20%7C%20self%20loadLibraryOn%3A%20jsonp.%20aBlock%20value%20%5D.%0A%20%20%20%20%20%20%20%20%27error%27%20-%3E%20%5Bwindow%20alert%3A%20%27error%27%5D%0A%20%20%20%20%7D'),
-messageSends: ["ajax:options:", "uri", unescape("-%3E"), "loadLibraryOn:", "value", "alert:"],
+source: unescape('fetchOnSuccessDo%3A%20aBlock%0A%0A%20%20jQuery%0A%20%20%20%20ajax%3A%20self%20uri%0A%20%20%20%20options%3A%20%23%7B%0A%20%20%20%20%20%20%20%20%27type%27%20-%3E%20%27GET%27.%0A%20%20%20%20%20%20%20%20%27dataType%27%20-%3E%20%27jsonp%27.%0A%20%20%20%20%20%20%20%20%27success%27%20-%3E%20%5B%20%3Ajsonp%20%7C%20json%20%3A%3D%20jsonp.%20aBlock%20value%20%5D.%0A%20%20%20%20%20%20%20%20%27error%27%20-%3E%20%5Bwindow%20alert%3A%20%27error%27%5D%0A%20%20%20%20%7D'),
+messageSends: ["ajax:options:", "uri", unescape("-%3E"), "value", "alert:"],
 referencedClasses: []
 }),
-smalltalk.CouchDB);
-
+smalltalk.SmackbonePersisted);
 
 smalltalk.addMethod(
-unescape('_on_at_'),
+unescape('_model'),
 smalltalk.method({
-selector: unescape('on%3Aat%3A'),
+selector: unescape('model'),
 category: 'not yet classified',
-fn: function (aCollection, aURI) {
+fn: function (){
 var self=this;
-return smalltalk.send(smalltalk.send(self, "_new", []), "_initializeOn_at_", [aCollection, aURI]);
+return smalltalk.send(self['@class'], "_fromJSON_", [self['@json']]);
 return self;},
-args: ["aCollection", "aURI"],
-source: unescape('on%3A%20aCollection%20at%3A%20aURI%0A%0A%09%5E%20self%20new%20initializeOn%3A%20aCollection%20at%3A%20aURI'),
-messageSends: ["initializeOn:at:", "new"],
+args: [],
+source: unescape('model%0A%0A%09%5E%20class%20fromJSON%3A%20json'),
+messageSends: ["fromJSON:"],
 referencedClasses: []
 }),
-smalltalk.CouchDB.klass);
+smalltalk.SmackbonePersisted);
 
-smalltalk.addMethod(
-unescape('_at_'),
-smalltalk.method({
-selector: unescape('at%3A'),
-category: 'not yet classified',
-fn: function (aURI){
-var self=this;
-return smalltalk.send(self, "_on_at_", [smalltalk.send((smalltalk.Array || Array), "_new", []), aURI]);
-return self;},
-args: ["aURI"],
-source: unescape('at%3A%20aURI%0A%0A%09%5E%20self%20on%3A%20Array%20new%20at%3A%20aURI'),
-messageSends: ["on:at:", "new"],
-referencedClasses: ["Array"]
-}),
-smalltalk.CouchDB.klass);
-
-
-smalltalk.addClass('SmackbonePersisted', smalltalk.Object, ['uri', 'model'], 'Grocery');
 smalltalk.addMethod(
 unescape('_doesNotUnderstand_'),
 smalltalk.method({
@@ -929,98 +873,14 @@ category: 'not yet classified',
 fn: function (aMessage){
 var self=this;
 smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", [smalltalk.send(aMessage, "_selector", [])]);
-return smalltalk.send(self['@model'], "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
+return smalltalk.send(smalltalk.send(self, "_model", []), "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
 return self;},
 args: ["aMessage"],
-source: unescape('doesNotUnderstand%3A%20aMessage%0Awindow%20alert%3A%20aMessage%20selector.%0A%09%5E%20model%20%0A%09%09perform%3A%20aMessage%20selector%0A%09%09withArguments%3A%20aMessage%20arguments'),
-messageSends: ["alert:", "selector", "perform:withArguments:", "arguments"],
+source: unescape('doesNotUnderstand%3A%20aMessage%0Awindow%20alert%3A%20aMessage%20selector.%0A%0A%09%5E%20self%20model%20%0A%09%09perform%3A%20aMessage%20selector%0A%09%09withArguments%3A%20aMessage%20arguments'),
+messageSends: ["alert:", "selector", "perform:withArguments:", "model", "arguments"],
 referencedClasses: []
 }),
 smalltalk.SmackbonePersisted);
-
-smalltalk.addMethod(
-unescape('_initializeFrom_'),
-smalltalk.method({
-selector: unescape('initializeFrom%3A'),
-category: 'not yet classified',
-fn: function (aJSONObject){
-var self=this;
-
-return self;},
-args: ["aJSONObject"],
-source: unescape('initializeFrom%3A%20aJSONObject'),
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.SmackbonePersisted);
-
-smalltalk.addMethod(
-unescape('_initializeOn_at_'),
-smalltalk.method({
-selector: unescape('initializeOn%3Aat%3A'),
-category: 'not yet classified',
-fn: function (aModel, aURI){
-var self=this;
-self['@model']=aModel;
-self['@uri']=aURI;
-return self;},
-args: ["aModel", "aURI"],
-source: unescape('initializeOn%3A%20aModel%20at%3A%20aURI%0A%0A%09model%20%3A%3D%20aModel.%0A%09uri%20%3A%3D%20aURI.'),
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.SmackbonePersisted);
-
-
-
-smalltalk.addClass('SmackboneCollection', smalltalk.SmackbonePersisted, [], 'Grocery');
-smalltalk.addMethod(
-unescape('_fetch'),
-smalltalk.method({
-selector: unescape('fetch'),
-category: 'not yet classified',
-fn: function (){
-var self=this;
-smalltalk.send((typeof jQuery == 'undefined' ? nil : jQuery), "_ajax_options_", [self['@uri'], smalltalk.HashedCollection._fromPairs_([smalltalk.send("type", "__minus_gt", ["GET"]),smalltalk.send("dataType", "__minus_gt", ["jsonp"]),smalltalk.send("success", "__minus_gt", [(function(jsonp){return smalltalk.send(self, "_initializeFrom_", [jsonp]);})]),smalltalk.send("error", "__minus_gt", [(function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["error"]);})])])]);
-return self;},
-args: [],
-source: unescape('fetch%0A%0A%20%20jQuery%0A%20%20%20%20ajax%3A%20uri%0A%20%20%20%20options%3A%20%23%7B%0A%20%20%20%20%20%20%20%20%27type%27%20-%3E%20%27GET%27.%0A%20%20%20%20%20%20%20%20%27dataType%27%20-%3E%20%27jsonp%27.%0A%20%20%20%20%20%20%20%20%27success%27%20-%3E%20%5B%20%3Ajsonp%20%7C%20self%20initializeFrom%3A%20jsonp%20%5D.%0A%20%20%20%20%20%20%20%20%27error%27%20-%3E%20%5Bwindow%20alert%3A%20%27error%27%5D%0A%20%20%20%20%7D'),
-messageSends: ["ajax:options:", unescape("-%3E"), "initializeFrom:", "alert:"],
-referencedClasses: []
-}),
-smalltalk.SmackboneCollection);
-
-smalltalk.addMethod(
-unescape('_initializeFrom_'),
-smalltalk.method({
-selector: unescape('initializeFrom%3A'),
-category: 'not yet classified',
-fn: function (aJSONObject){
-var self=this;
-
-return self;},
-args: ["aJSONObject"],
-source: unescape('initializeFrom%3A%20aJSONObject'),
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.SmackboneCollection);
-
-smalltalk.addMethod(
-unescape('_doesNotUnderstand_'),
-smalltalk.method({
-selector: unescape('doesNotUnderstand%3A'),
-category: 'not yet classified',
-fn: function (aMessage){
-var self=this;
-return smalltalk.send(self['@model'], "_perform_withArguments_", [smalltalk.send(aMessage, "_selector", []), smalltalk.send(aMessage, "_arguments", [])]);
-return self;},
-args: ["aMessage"],
-source: unescape('doesNotUnderstand%3A%20aMessage%0A%0A%09%5E%20model%20%0A%09%09perform%3A%20aMessage%20selector%0A%09%09withArguments%3A%20aMessage%20arguments'),
-messageSends: ["perform:withArguments:", "selector", "arguments"],
-referencedClasses: []
-}),
-smalltalk.SmackboneCollection);
 
 
 smalltalk.addMethod(
@@ -1028,35 +888,35 @@ unescape('_on_at_'),
 smalltalk.method({
 selector: unescape('on%3Aat%3A'),
 category: 'not yet classified',
-fn: function (aCollection, aURI){
+fn: function (aClass, aURI){
 var self=this;
-return smalltalk.send(smalltalk.send(self, "_new", []), "_initializeOn_at_", [aCollection, aURI]);
+return smalltalk.send(smalltalk.send(self, "_new", []), "_initializeOn_at_", [aClass, aURI]);
 return self;},
-args: ["aCollection", "aURI"],
-source: unescape('on%3A%20aCollection%20at%3A%20aURI%0A%0A%09%5E%20self%20new%20initializeOn%3A%20aCollection%20at%3A%20aURI'),
+args: ["aClass", "aURI"],
+source: unescape('on%3A%20aClass%20at%3A%20aURI%0A%0A%09%5E%20self%20new%20initializeOn%3A%20aClass%20at%3A%20aURI'),
 messageSends: ["initializeOn:at:", "new"],
 referencedClasses: []
 }),
-smalltalk.SmackboneCollection.klass);
-
-smalltalk.addMethod(
-unescape('_at_'),
-smalltalk.method({
-selector: unescape('at%3A'),
-category: 'not yet classified',
-fn: function (aURI){
-var self=this;
-return smalltalk.send(self, "_on_at_", [smalltalk.send((smalltalk.Array || Array), "_new", []), aURI]);
-return self;},
-args: ["aURI"],
-source: unescape('at%3A%20aURI%0A%0A%09%5E%20self%20on%3A%20Array%20new%20at%3A%20aURI'),
-messageSends: ["on:at:", "new"],
-referencedClasses: ["Array"]
-}),
-smalltalk.SmackboneCollection.klass);
+smalltalk.SmackbonePersisted.klass);
 
 
 smalltalk.addClass('SmackboneModel', smalltalk.SmackbonePersisted, [], 'Grocery');
+smalltalk.addMethod(
+unescape('_name'),
+smalltalk.method({
+selector: unescape('name'),
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.send(smalltalk.send(self, "_model", []), "_name", []);
+return self;},
+args: [],
+source: unescape('name%0A%0A%09%5E%20self%20model%20name'),
+messageSends: ["name", "model"],
+referencedClasses: []
+}),
+smalltalk.SmackboneModel);
+
 
 
 smalltalk.addClass('GroceryRouter', smalltalk.SmackboneRouter, ['grocery'], 'Grocery');
@@ -1171,5 +1031,88 @@ messageSends: ["new", "addRoute:", "onhashchange:", "handleHashChanged", "start"
 referencedClasses: ["GroceryRouter", "SmackboneHistorian"]
 }),
 smalltalk.GroceryUtil.klass);
+
+
+smalltalk.addClass('SmackboneCollection', smalltalk.SmackbonePersisted, ['class', 'json'], 'Grocery');
+smalltalk.addMethod(
+unescape('_loadLibraryOn_'),
+smalltalk.method({
+selector: unescape('loadLibraryOn%3A'),
+category: 'not yet classified',
+fn: function (jsonp){
+var self=this;
+smalltalk.send(smalltalk.send(jsonp, "_rows", []), "_do_", [(function(aRow){return smalltalk.send(smalltalk.send(self, "_model", []), "_add_", [smalltalk.send(aRow, "_id", [])]);})]);
+return self;},
+args: ["jsonp"],
+source: unescape('loadLibraryOn%3A%20jsonp%0A%0A%09jsonp%20rows%20do%3A%20%5B%20%3AaRow%20%7C%20%0A%09%09%28%20self%20model%20%29%20add%3A%20aRow%20id.%0A%22%20%20jQuery%0A%20%20%20%20ajax%3A%20%27http%3A//localhost/couchdb/recipes/%27%2C%20aRow%20id%0A%20%20%20%20options%3A%20%23%7B%0A%20%20%20%20%20%20%20%20%27type%27%20-%3E%20%27GET%27.%0A%20%20%20%20%20%20%20%20%27dataType%27%20-%3E%20%27jsonp%27.%0A%20%20%20%20%20%20%20%20%27success%27%20-%3E%20%5B%20%3Ajsonp%20%7C%20collection%20add%3A%20aRow%20id%20%5D.%0A%20%20%20%20%20%20%20%20%27error%27%20-%3E%20%5Bwindow%20alert%3A%20%27error%27%5D%0A%20%20%20%20%7D%0A%22%0A%5D'),
+messageSends: ["do:", "rows", "add:", "model", "id"],
+referencedClasses: []
+}),
+smalltalk.SmackboneCollection);
+
+smalltalk.addMethod(
+unescape('_isEmpty'),
+smalltalk.method({
+selector: unescape('isEmpty'),
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.send(smalltalk.send(self, "_model", []), "_isEmpty", []);
+return self;},
+args: [],
+source: unescape('isEmpty%0A%0A%09%5E%20self%20model%20isEmpty'),
+messageSends: ["isEmpty", "model"],
+referencedClasses: []
+}),
+smalltalk.SmackboneCollection);
+
+smalltalk.addMethod(
+unescape('_notEmpty'),
+smalltalk.method({
+selector: unescape('notEmpty'),
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.send(smalltalk.send(self, "_model", []), "_notEmpty", []);
+return self;},
+args: [],
+source: unescape('notEmpty%0A%0A%09%5E%20self%20model%20notEmpty'),
+messageSends: ["notEmpty", "model"],
+referencedClasses: []
+}),
+smalltalk.SmackboneCollection);
+
+
+smalltalk.addMethod(
+unescape('_on_at_'),
+smalltalk.method({
+selector: unescape('on%3Aat%3A'),
+category: 'not yet classified',
+fn: function (aClass, aURI){
+var self=this;
+return smalltalk.send(smalltalk.send(self, "_new", []), "_initializeOn_at_", [aClass, aURI]);
+return self;},
+args: ["aClass", "aURI"],
+source: unescape('on%3A%20aClass%20at%3A%20aURI%0A%0A%09%5E%20self%20new%20initializeOn%3A%20aClass%20at%3A%20aURI'),
+messageSends: ["initializeOn:at:", "new"],
+referencedClasses: []
+}),
+smalltalk.SmackboneCollection.klass);
+
+smalltalk.addMethod(
+unescape('_at_'),
+smalltalk.method({
+selector: unescape('at%3A'),
+category: 'not yet classified',
+fn: function (aURI){
+var self=this;
+return smalltalk.send(self, "_on_at_", [smalltalk.send((smalltalk.Array || Array), "_new", []), aURI]);
+return self;},
+args: ["aURI"],
+source: unescape('at%3A%20aURI%0A%0A%09%5E%20self%20on%3A%20Array%20new%20at%3A%20aURI'),
+messageSends: ["on:at:", "new"],
+referencedClasses: ["Array"]
+}),
+smalltalk.SmackboneCollection.klass);
 
 

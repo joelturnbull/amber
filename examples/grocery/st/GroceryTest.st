@@ -173,19 +173,34 @@ testAddIngredient
 	self assert: ( widget text includesSubString: 'Mayonnaise' ).
 ! !
 
-GroceryTest subclass: #CouchDBTest
+GroceryTest subclass: #SmackboneCollectionTest
 	instanceVariableNames: ''
 	category: 'GroceryTest'!
 
-!CouchDBTest methodsFor: 'not yet classified'!
+!SmackboneCollectionTest methodsFor: 'not yet classified'!
 
 testFetch
 | library |
 	
-	library := CouchDB 
-			on: Array new
+	library := SmackboneCollection 
+			on: RecipeLibrary
 			at: 'http://127.0.0.1:5984/recipes/_all_docs'.
-	self assert: library isEmpty. 
-	library fetchOnSuccessDo: [ self assert: library notEmpty ].
+"	self assert: library isEmpty. 
+"	library fetchOnSuccessDo: [ self assert: library notEmpty ].
+! !
+
+GroceryTest subclass: #SmackboneModelTest
+	instanceVariableNames: ''
+	category: 'GroceryTest'!
+
+!SmackboneModelTest methodsFor: 'not yet classified'!
+
+testFetch
+| recipe |
+	
+	recipe := SmackboneModel
+			on: Recipe
+			at: 'http://127.0.0.1:5984/recipes/62dbe43584f7ba52dc7b268479007a2c'.
+	recipe fetchOnSuccessDo: [ self assert: recipe name notEmpty ].
 ! !
 
